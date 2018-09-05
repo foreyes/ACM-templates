@@ -22,13 +22,16 @@ inline ll Cross(Point a,Point b){
 	return a.x*b.y - a.y*b.x;
 }
 inline double Length(Vector a){
-	return sqrt(a*a);
+	return sqrt(a.x*a.x + a.y*a.y);
+}
+inline double Length2(Vector a){
+	return a.x*a.x + a.y*a.y;
 }
 inline double Angle(Vector a,Vector b){
 	return acos(a * b / Length(a) / Length(b));
 }
 int dcmp(double x){
-	if(fab(x) < eps) return 0;else return x < 0 ? -1 : 1;
+	if(fabs(x) < eps) return 0;else return x < 0 ? -1 : 1;
 }
 bool operator==(const Point& a,const Point& b){
 	return dcmp(a.x-b.x) == 0 && dcmp(a.y-b.y) == 0;
@@ -37,12 +40,12 @@ double Area2(Point a,Point b,Point c){
 	return Cross(b-a,c-a);
 }
 Vector rotate(Vector a,double rad){
-	return Vector(a.x*cos(rad)-a.y*sin(rad), A.x*sin(rad)+A.y*cos(rad));
+	return Vector(a.x*cos(rad)-a.y*sin(rad), a.x*sin(rad)+a.y*cos(rad));
 }
 //求向量A的单位左转法向量，使用前保证A不是零向量 
 Vector Normal(Vector a){
 	double L = Length(a);
-	return Vector(-A.y/L,A.x/L);
+	return Vector(-a.y/L,a.x/L);
 }
 //------------------线段相关内容--------------------
 //有向直线 
@@ -71,7 +74,7 @@ double distanceToLine(Point P,Line L){
 }
 //点在线段上(不含端点)
 bool pointOnSegment(Point P,Point a,Point b){
-	return dcmp(Cross(a-P,b-P)) == 0 && dcmp((a-p)*(b-p)) < 0;
+	return dcmp(Cross(a-P,b-P)) == 0 && dcmp((a-P)*(b-P)) < 0;
 } 
 //----------------多边形相关内容----------------------
 struct Polygon{
@@ -84,7 +87,7 @@ struct Polygon{
 	}
 	double getLength(){
 		double sum = 0;
-		length.clear()
+		length.clear();
 		for(int i = 0;i < size;i++){
 			length.pb(Length(ps[i]-ps[(i+1)%size]));
 			sum += length.back();
