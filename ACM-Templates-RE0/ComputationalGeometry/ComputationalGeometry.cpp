@@ -78,15 +78,18 @@ struct Polygon{
 	int size;
 	vector<Point> ps;
 	vector<double> rad;
-	double length;
+	vector<double> length;
 	void getRad(){
 		//TODO
 	}
 	double getLength(){
-		length = 0;
+		double sum = 0;
+		length.clear()
 		for(int i = 0;i < size;i++){
-			length += Length(ps[i]-ps[(i+1)%size]);
+			length.pb(Length(ps[i]-ps[(i+1)%size]));
+			sum += length.back();
 		}
+		return sum;
 	}
 	//仅适用于凸多边形 
 	bool pointInPloygon(Point a){
