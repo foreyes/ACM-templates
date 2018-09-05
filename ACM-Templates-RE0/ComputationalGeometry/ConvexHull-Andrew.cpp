@@ -56,7 +56,7 @@ Andrew算法基于水平序求凸包
 精度要求高时建议使用三态函数
 warning：下标从0开始 
 */
-int convexHull(Point* p,bool* check,int n,Point* ch){
+int convexHull(Point* p,bool* check,int n,Point* ch,Polygon& poly){
 	sort(p,p+n);
 	int m = 0;
 	for(int i = 0;i < n;i++){
@@ -71,5 +71,7 @@ int convexHull(Point* p,bool* check,int n,Point* ch){
 		ch[m++] = p[i];
 	}
 	if(n > 1) m--;
+	poly.size = m;
+	for(int i = 0;i < m;i++) poly.ps.pb(ch[i]);
 	return m;
 }

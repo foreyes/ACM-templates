@@ -42,7 +42,7 @@ Vector rotate(Vector a,double rad){
 //求向量A的单位左转法向量，使用前保证A不是零向量 
 Vector Normal(Vector a){
 	double L = Length(a);
-	return Vector(A.x/L,A.y/L);
+	return Vector(-A.y/L,A.x/L);
 }
 //------------------线段相关内容--------------------
 //有向直线 
@@ -69,7 +69,31 @@ double distanceToLine(Point P,Line L){
 	Vector v1 = L.v, v2 = P - L.P;
 	return fabs(Cross(v1,v2)) / Length(v1);//不取绝对值就是有向距离 
 }
-//点到线段距离
-double distanceToSegment(Point P,Point A,Point B){
-	
+//点在线段上(不含端点)
+bool pointOnSegment(Point P,Point a,Point b){
+	return dcmp(Cross(a-P,b-P)) == 0 && dcmp((a-p)*(b-p)) < 0;
 } 
+//----------------多边形相关内容----------------------
+struct Polygon{
+	int size;
+	vector<Point> ps;
+	vector<double> rad;
+	double length;
+	void getRad(){
+		//TODO
+	}
+	double getLength(){
+		length = 0;
+		for(int i = 0;i < size;i++){
+			length += Length(ps[i]-ps[(i+1)%size]);
+		}
+	}
+	//仅适用于凸多边形 
+	bool pointInPloygon(Point a){
+		for(int i = 0;i < size;i++){
+			if(Cross(ps[i]-a,ps[(i+1)%size]-a) < 0) return false;
+		} 
+		return true;
+	}
+	//TODO:实现判断点在凹多边形内 
+};
