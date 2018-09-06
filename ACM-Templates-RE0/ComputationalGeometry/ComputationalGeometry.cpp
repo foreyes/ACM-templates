@@ -132,7 +132,7 @@ struct Polygon{
 		}
 		return sum;
 	}
-	//仅适用于凸多边形 
+	//使用前请保证ps内按逆时针顺序存放，且为凸多边形 
 	bool pointInPloygon(Point a){
 		for(int i = 0;i < size;i++){
 			if(Cross(ps[i]-a,ps[(i+1)%size]-a) < 0) return false;
