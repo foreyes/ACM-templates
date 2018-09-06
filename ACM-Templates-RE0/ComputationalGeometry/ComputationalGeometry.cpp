@@ -6,6 +6,12 @@ typedef Point Vector;
 bool operator<(const Point& a,const Point& b){
 	return (a.x < b.x) || (a.x == b.x && a.y < b.y);
 }
+int dcmp(double x){
+	if(fabs(x) < eps) return 0;else return x < 0 ? -1 : 1;
+}
+bool operator==(const Point& a,const Point& b){
+	return dcmp(a.x-b.x) == 0 && dcmp(a.y-b.y) == 0;
+}
 Vector operator-(Point a,Point b){
 	return Point(a.x-b.x, a.y-b.y);
 }
@@ -27,14 +33,14 @@ inline double Length(Vector a){
 inline double Length2(Vector a){
 	return a.x*a.x + a.y*a.y;
 }
+//单位化向量 ，若是零向量直接返回 
+Vector unit(Vector a){
+	double l = Length(a); 
+	if(l < eps) return a;
+	return Point(a.x/l,a.y/l);
+}
 inline double Angle(Vector a,Vector b){
 	return acos(a * b / Length(a) / Length(b));
-}
-int dcmp(double x){
-	if(fabs(x) < eps) return 0;else return x < 0 ? -1 : 1;
-}
-bool operator==(const Point& a,const Point& b){
-	return dcmp(a.x-b.x) == 0 && dcmp(a.y-b.y) == 0;
 }
 double Area2(Point a,Point b,Point c){
 	return Cross(b-a,c-a);
