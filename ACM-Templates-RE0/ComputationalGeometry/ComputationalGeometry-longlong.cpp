@@ -27,3 +27,12 @@ inline double Length(Vector a){
 inline double Angle(Vector a,Vector b){
 	return acos((double)(a * b) / Length(a) / Length(b));
 }
+//不损失精度判断线段规范相交(不含端点)
+bool isSegmentsIntersection(Point A,Point B,Point C,Point D){
+	//跨立试验 
+	if(Cross(C-A,D-A) * Cross(C-B,D-B) >= 0) return false;
+	//快速排斥试验 
+	if(min(max(A.x,B.x),max(C.x,D.x)) < max(min(A.x,B.x),min(C.x,D.x))) return false;
+	if(min(max(A.y,B.y),max(C.y,D.y)) < max(min(A.y,B.y),min(C.y,D.y))) return false;
+	return true;
+} 
