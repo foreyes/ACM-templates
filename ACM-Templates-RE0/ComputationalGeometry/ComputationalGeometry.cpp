@@ -42,8 +42,12 @@ double Area2(Point a,Point b,Point c){
 Vector rotate(Vector a,double rad){
 	return Vector(a.x*cos(rad)-a.y*sin(rad), a.x*sin(rad)+a.y*cos(rad));
 }
-//求向量A的单位左转法向量，使用前保证A不是零向量 
-Vector Normal(Vector a){
+//求向量A的左转法向量 
+Vector normal(Vector a){
+	return Vector(-a.y,a.x);
+}
+//求单位左转法向量，调用前请保证A不是零向量 
+Vector unitNormal(Vector a){
 	double L = Length(a);
 	return Vector(-a.y/L,a.x/L);
 }
@@ -114,7 +118,7 @@ struct Polygon{
 struct Circle{
 	Point o;
 	double r;
-	Circle(Point o,double r):c(c),r(r){}
+	Circle(Point o,double r):o(o),r(r){}
 	Point point(double rad){
 		return Point(c.x+cos(rad)*r,c.y+sin(rad)*r);
 	}
@@ -131,8 +135,8 @@ Circle getCircle(Point a, Point b, Point c){
         if (dcmp(Lenth(b-a)+Lenth(a-c)-Lenth(b-c))==0) return getCircle(b,c);
         if (dcmp(Lenth(a-c)+Lenth(c-b)-Lenth(a-b))==0) return getCircle(a,b);
 	} else{
-		Line L1 = Line(midPoint(a,b),Normal(b-a));
-		Line L2 = Line(midPoint(a,c),Normal(c-a));
+		Line L1 = Line(midPoint(a,b),normal(b-a));
+		Line L2 = Line(midPoint(a,c),normal(c-a));
 		Point o = getLineIntersection(L1,L2);
 		return Circle(o,Length(a-o));
 	}
