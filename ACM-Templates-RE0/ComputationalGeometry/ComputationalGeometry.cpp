@@ -15,7 +15,7 @@ Vector operator+(Point a,Point b){
 double operator*(Vector a,Vector b){
 	return a.x*b.x + a.y*b.y;
 }
-Vector operator*(Vector a,ll b){
+Vector operator*(Vector a,double b){
 	return Vector(a.x*b, a.y*b);
 }
 inline ll Cross(Point a,Point b){
@@ -47,6 +47,13 @@ Vector Normal(Vector a){
 	double L = Length(a);
 	return Vector(-a.y/L,a.x/L);
 }
+//判断三点共线 
+bool threePointsInLine(Point a,Point b,Point c){
+	return dcmp(Cross(b-a,c-a)) == 0;
+}
+Point midPoint(Point a,Point b){
+	return Point((a.x+b.x)*0.5,(a.y+b.y*0.5));
+} 
 //------------------线段相关内容--------------------
 //有向直线 
 struct Line{
@@ -103,3 +110,35 @@ struct Polygon{
 	}
 	//TODO:实现判断点在凹多边形内 
 };
+//-----------------圆相关内容-----------------------
+struct Circle{
+	Point o;
+	double r;
+	Circle(Point o,double r):c(c),r(r){}
+	Point point(double rad){
+		return Point(c.x+cos(rad)*r,c.y+sin(rad)*r);
+	}
+};
+//给定两点作为直径获取圆
+Circle getCircle(Point a,Point b){
+	return Circle((a+b)*0.5,Length(a-b)*0.5);
+} 
+//通过三个点来确定一个圆,若三点共线，将最远的两个点作为直径 
+Circle getCircle(Point a, Point b, Point c){
+	if(dcmp(Cross(b-a,c-a)) == 0){
+		//三点共线
+		if (dcmp(Lenth(a-b)+Lenth(b-c)-Lenth(a-c))==0) return getCircle(a,c);
+        if (dcmp(Lenth(b-a)+Lenth(a-c)-Lenth(b-c))==0) return getCircle(b,c);
+        if (dcmp(Lenth(a-c)+Lenth(c-b)-Lenth(a-b))==0) return getCircle(a,b);
+	} else{
+		Line L1 = Line(midPoint(a,b),Normal(b-a));
+		Line L2 = Line(midPoint(a,c),Normal(c-a));
+		Point o = getLineIntersection(L1,L2);
+		return Circle(o,Length(a-o));
+	}
+}
+
+//点在圆内(不含边界是<)
+bool pointInCircle(Point a,Circle c){
+	return Length2(a-c.o) <= c.r*c.r;
+}
