@@ -57,6 +57,11 @@ Vector unitNormal(Vector a){
 	double L = Length(a);
 	return Vector(-a.y/L,a.x/L);
 }
+/* TODO:验证以下三个函数的正确性 
+//点在线段上(不含端点)
+bool pointOnSegment(Point P,Point a,Point b){
+	return dcmp(Cross(a-P,b-P)) == 0 && dcmp((a-P)*(b-P)) < 0;
+} 
 //不损失精度判断线段规范相交(不含端点)
 bool isSegmentsIntersection(Point A,Point B,Point C,Point D){
 	//跨立试验 
@@ -65,7 +70,18 @@ bool isSegmentsIntersection(Point A,Point B,Point C,Point D){
 	if(min(max(A.x,B.x),max(C.x,D.x)) < max(min(A.x,B.x),min(C.x,D.x))) return false;
 	if(min(max(A.y,B.y),max(C.y,D.y)) < max(min(A.y,B.y),min(C.y,D.y))) return false;
 	return true;
-} 
+}
+//判断两条线段是否有除了端点外的公共点 
+bool segmentsCrashCheck(Point A,Point B,Point C,Point D){
+	//共线 
+	if(Cross(B-A,D-C) == 0){
+		if(pointOnSegment(A,C,D) || pointOnSegment(B,C,D) ||
+		   pointOnSegment(C,A,B) || pointOnSegment(D,A,B)) return true;
+		return false; 
+	}
+	return isSegmentsIntersection(A,B,C,D);
+}
+*/
 //判断三点共线 
 bool threePointsInLine(Point a,Point b,Point c){
 	return dcmp(Cross(b-a,c-a)) == 0;
@@ -98,10 +114,6 @@ double distanceToLine(Point P,Line L){
 	Vector v1 = L.v, v2 = P - L.P;
 	return fabs(Cross(v1,v2)) / Length(v1);//不取绝对值就是有向距离 
 }
-//点在线段上(不含端点)
-bool pointOnSegment(Point P,Point a,Point b){
-	return dcmp(Cross(a-P,b-P)) == 0 && dcmp((a-P)*(b-P)) < 0;
-} 
 //----------------多边形相关内容----------------------
 struct Polygon{
 	int size;

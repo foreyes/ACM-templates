@@ -27,6 +27,11 @@ inline double Length(Vector a){
 inline double Angle(Vector a,Vector b){
 	return acos((double)(a * b) / Length(a) / Length(b));
 }
+/*
+//点在线段上(不含端点)
+bool pointOnSegment(Point P,Point a,Point b){
+	return Cross(a-P,b-P) == 0 && (a-P)*(b-P) < 0;
+} 
 //不损失精度判断线段规范相交(不含端点)
 bool isSegmentsIntersection(Point A,Point B,Point C,Point D){
 	//跨立试验 
@@ -35,4 +40,15 @@ bool isSegmentsIntersection(Point A,Point B,Point C,Point D){
 	if(min(max(A.x,B.x),max(C.x,D.x)) < max(min(A.x,B.x),min(C.x,D.x))) return false;
 	if(min(max(A.y,B.y),max(C.y,D.y)) < max(min(A.y,B.y),min(C.y,D.y))) return false;
 	return true;
-} 
+}
+//判断两条线段是否有除了端点外的公共点 
+bool segmentsCrashCheck(Point A,Point B,Point C,Point D){
+	//共线 
+	if(Cross(B-A,D-C) == 0){
+		if(pointOnSegment(A,C,D) || pointOnSegment(B,C,D) ||
+		   pointOnSegment(C,A,B) || pointOnSegment(D,A,B)) return true;
+		return false; 
+	}
+	return isSegmentsIntersection(A,B,C,D);
+}
+*/
