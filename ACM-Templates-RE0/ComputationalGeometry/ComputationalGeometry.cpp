@@ -18,7 +18,7 @@ double operator*(Vector a,Vector b){
 Vector operator*(Vector a,double b){
 	return Vector(a.x*b, a.y*b);
 }
-inline ll Cross(Point a,Point b){
+inline double Cross(Point a,Point b){
 	return a.x*b.y - a.y*b.x;
 }
 inline double Length(Vector a){
@@ -56,7 +56,7 @@ bool threePointsInLine(Point a,Point b,Point c){
 	return dcmp(Cross(b-a,c-a)) == 0;
 }
 Point midPoint(Point a,Point b){
-	return Point((a.x+b.x)*0.5,(a.y+b.y*0.5));
+	return Point((a.x+b.x)*0.5,(a.y+b.y)*0.5);
 } 
 //------------------线段相关内容--------------------
 //有向直线 
@@ -120,7 +120,7 @@ struct Circle{
 	double r;
 	Circle(Point o,double r):o(o),r(r){}
 	Point point(double rad){
-		return Point(c.x+cos(rad)*r,c.y+sin(rad)*r);
+		return Point(o.x+cos(rad)*r,o.y+sin(rad)*r);
 	}
 };
 //给定两点作为直径获取圆
@@ -131,9 +131,9 @@ Circle getCircle(Point a,Point b){
 Circle getCircle(Point a, Point b, Point c){
 	if(dcmp(Cross(b-a,c-a)) == 0){
 		//三点共线
-		if (dcmp(Lenth(a-b)+Lenth(b-c)-Lenth(a-c))==0) return getCircle(a,c);
-        if (dcmp(Lenth(b-a)+Lenth(a-c)-Lenth(b-c))==0) return getCircle(b,c);
-        if (dcmp(Lenth(a-c)+Lenth(c-b)-Lenth(a-b))==0) return getCircle(a,b);
+		if (dcmp(Length(a-b)+Length(b-c)-Length(a-c))==0) return getCircle(a,c);
+        if (dcmp(Length(b-a)+Length(a-c)-Length(b-c))==0) return getCircle(b,c);
+        if (dcmp(Length(a-c)+Length(c-b)-Length(a-b))==0) return getCircle(a,b);
 	} else{
 		Line L1 = Line(midPoint(a,b),normal(b-a));
 		Line L2 = Line(midPoint(a,c),normal(c-a));
@@ -141,8 +141,24 @@ Circle getCircle(Point a, Point b, Point c){
 		return Circle(o,Length(a-o));
 	}
 }
-
+//通过三个点得到最小圆
+Circle getMinCircle(Point a,Point b,Point c){
+	if(dcmp(Cross(b-a,c-a)) == 0){
+		//三点共线
+		if (dcmp(Length(a-b)+Length(b-c)-Length(a-c))==0) return getCircle(a,c);
+        if (dcmp(Length(b-a)+Length(a-c)-Length(b-c))==0) return getCircle(b,c);
+        if (dcmp(Length(a-c)+Length(c-b)-Length(a-b))==0) return getCircle(a,b);
+	} else{
+		if((b-a)*(c-a) <= 0) return getCircle(b,c);
+		if((a-b)*(c-b) <= 0) return getCircle(a,c);
+		if((a-c)*(b-c) <= 0) return getCircle(a,b);
+		Line L1 = Line(midPoint(a,b),normal(b-a));
+		Line L2 = Line(midPoint(a,c),normal(c-a));
+		Point o = getLineIntersection(L1,L2);
+		return Circle(o,Length(a-o));
+	}
+}
 //点在圆内(不含边界是<)
 bool pointInCircle(Point a,Circle c){
-	return Length2(a-c.o) <= c.r*c.r;
+	return dcmp(Length2(a-c.o)-c.r*c.r) <= 0;
 }

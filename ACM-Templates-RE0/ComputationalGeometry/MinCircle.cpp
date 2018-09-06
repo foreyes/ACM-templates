@@ -1,4 +1,4 @@
-//二维最小圆覆盖，增量法 
+//二维最小圆覆盖，随机增量法 
 Circle minCircle(Point *p, int n){
 	random_shuffle(p,p+n);
 	Circle cur = Circle(p[0],0);
@@ -10,9 +10,8 @@ Circle minCircle(Point *p, int n){
 			cur = getCircle(p[i],p[j]);
 			for(int k = 0;k < j;k++){
 				if(pointInCircle(p[k],cur)) continue;
-				cur = getCircle(p[i],p[j],p[k]);
+				cur = getMinCircle(p[i],p[j],p[k]);
 			}
-			
 		}
 	}
 	return cur;
