@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-void read(int& x){
+inline void read(int& x){
 	char ch = getchar();
 	int flag = 1;
 	while(ch < '0' || ch > '9'){
@@ -13,7 +13,7 @@ void read(int& x){
 	for(;ch >= '0' && ch <= '9';ch = getchar()) x=x*10+ch-'0';
 	x *= flag;
 }
-void write(int x){
+inline void write(int x){
 	if(x < 0){
 		putchar('-');
 		x *= -1;
