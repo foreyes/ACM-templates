@@ -66,6 +66,7 @@ bool pointOnSegment(Point P,Point a,Point b){
 bool isSegmentsIntersection(Point A,Point B,Point C,Point D){
 	//跨立试验 
 	if(Cross(C-A,D-A) * Cross(C-B,D-B) >= 0) return false;
+	if(Cross(A-C,B-C) * Cross(A-D,B-D) >= 0) return false;
 	//快速排斥试验 
 	if(min(max(A.x,B.x),max(C.x,D.x)) < max(min(A.x,B.x),min(C.x,D.x))) return false;
 	if(min(max(A.y,B.y),max(C.y,D.y)) < max(min(A.y,B.y),min(C.y,D.y))) return false;
