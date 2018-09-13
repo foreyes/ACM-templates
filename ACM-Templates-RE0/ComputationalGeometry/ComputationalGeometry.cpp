@@ -2,7 +2,7 @@ struct Point{
 	double x,y;ll id; 
 	Point(double _x = 0,double _y = 0):x(_x),y(_y){}
 };
-typedef Point Vector;
+typedef vector<Point> polygon;
 bool operator<(const Point& a,const Point& b){
 	return (a.x < b.x) || (a.x == b.x && a.y < b.y);
 }
@@ -12,16 +12,16 @@ int dcmp(double x){
 bool operator==(const Point& a,const Point& b){
 	return dcmp(a.x-b.x) == 0 && dcmp(a.y-b.y) == 0;
 }
-Vector operator-(Point a,Point b){
+Point operator-(Point a,Point b){
 	return Point(a.x-b.x, a.y-b.y);
 }
-Vector operator+(Point a,Point b){
+Point operator+(Point a,Point b){
 	return Point(a.x+b.x, a.y+b.y);
 }
-double operator*(Vector a,Vector b){
+double operator*(Point a,Point b){
 	return a.x*b.x + a.y*b.y;
 }
-Vector operator*(Vector a,double b){
+Point operator*(Point a,double b){
 	return Vector(a.x*b, a.y*b);
 }
 inline double Cross(Point a,Point b){
@@ -34,34 +34,30 @@ inline double Length2(Vector a){
 	return a.x*a.x + a.y*a.y;
 }
 //单位化向量 ，若是零向量直接返回 
-Vector unit(Vector a){
+Point unit(Point a){
 	double l = Length(a); 
 	if(l < eps) return a;
 	return Point(a.x/l,a.y/l);
 }
-inline double Angle(Vector a,Vector b){
+inline double Angle(Point a,Point b){
 	return acos(a * b / Length(a) / Length(b));
 }
+//有向面积 
 double Area2(Point a,Point b,Point c){
 	return Cross(b-a,c-a);
 }
-Vector rotate(Vector a,double rad){
-	return Vector(a.x*cos(rad)-a.y*sin(rad), a.x*sin(rad)+a.y*cos(rad));
+Point rotate(Point a,double rad){
+	return Point(a.x*cos(rad)-a.y*sin(rad), a.x*sin(rad)+a.y*cos(rad));
 }
 //求向量A的左转法向量 
-Vector normal(Vector a){
-	return Vector(-a.y,a.x);
+Point normal(Point a){
+	return Point(-a.y,a.x);
 }
 //求单位左转法向量，调用前请保证A不是零向量 
-Vector unitNormal(Vector a){
-	double L = Length(a);
-	return Vector(-a.y/L,a.x/L);
+Point unitNormal(Point a){
+	double l = Length(a);
+	return Point(-a.y/l,a.x/l);
 }
-/* TODO:验证以下三个函数的正确性 
-//点在线段上(不含端点)
-bool pointOnSegment(Point P,Point a,Point b){
-	return dcmp(Cross(a-P,b-P)) == 0 && dcmp((a-P)*(b-P)) < 0;
-} 
 //不损失精度判断线段规范相交(不含端点)
 bool isSegmentsIntersection(Point A,Point B,Point C,Point D){
 	//跨立试验 
@@ -72,32 +68,31 @@ bool isSegmentsIntersection(Point A,Point B,Point C,Point D){
 	if(min(max(A.y,B.y),max(C.y,D.y)) < max(min(A.y,B.y),min(C.y,D.y))) return false;
 	return true;
 }
-//判断两条线段是否有除了端点外的公共点 
-bool segmentsCrashCheck(Point A,Point B,Point C,Point D){
-	//共线 
-	if(Cross(B-A,D-C) == 0){
-		if(pointOnSegment(A,C,D) || pointOnSegment(B,C,D) ||
-		   pointOnSegment(C,A,B) || pointOnSegment(D,A,B)) return true;
-		return false; 
-	}
-	return isSegmentsIntersection(A,B,C,D);
-}
-*/
-//判断三点共线 
-bool threePointsInLine(Point a,Point b,Point c){
-	return dcmp(Cross(b-a,c-a)) == 0;
+//点在线段上(//不含端点)
+bool isPointOnSegment(Point P,Point a,Point b){
+	if(P == a || P == b) return true;
+	//if(p == a || p == b) return false;
+	return dcmp(Cross(a-P,b-P)) == 0 && dcmp((a-P)*(b-P)) < 0;
+} 
+//判断两条线段是否有公共点 
+bool isSegmengtsCrash(Point A,Point B,Point C,Point D){
+	if( isPointOnSegment(A,C,D) || isPointOnSegment(B,C,D) ||
+		isPointOnSegment(C,A,B) || isPointOnSegment(D,A,B)) return true;
+	if(dcmp(Cross(B-A,D-C)) == 0) return false;//共线 
+	return isSegmentsIntersection(A,B,C,D);//判断线段规范相交 
 }
 Point midPoint(Point a,Point b){
 	return Point((a.x+b.x)*0.5,(a.y+b.y)*0.5);
 } 
 //------------------线段相关内容--------------------
+/* 
 //有向直线 
 struct Line{
 	Point P;//直线上任意一点 
-	Vector v;//方向向量，左边为半平面 
+	Point v;//方向向量，左边为半平面 
 	double ang;//极角，从x正半轴转到v所需的角(弧度) 
 	Line(){}
-	Line(Point P, Vector v):P(P),v(v){
+	Line(Point P, Point v):P(P),v(v){
 		ang = atan2(v.y, v.x);
 	}
 	bool operator < (const Line& L) const{ //半平面交需要的排序函数 
@@ -106,13 +101,13 @@ struct Line{
 };
 //直线相交，使用前保证有唯一交点，cross(v,w)非0
 Point getLineIntersection(Line L1, Line L2){
-	Vector u = L1.P - L2.P;
+	Point u = L1.P - L2.P;
 	double t = Cross(L2.v, u) / Cross(L1.v, L2.v);
 	return L1.P + L1.v*t; 
 }
 //点到直线距离
 double distanceToLine(Point P,Line L){
-	Vector v1 = L.v, v2 = P - L.P;
+	Point v1 = L.v, v2 = P - L.P;
 	return fabs(Cross(v1,v2)) / Length(v1);//不取绝对值就是有向距离 
 }
 //----------------多边形相关内容----------------------
@@ -190,3 +185,4 @@ Circle getMinCircle(Point a,Point b,Point c){
 bool pointInCircle(Point a,Circle c){
 	return dcmp(Length2(a-c.o)-c.r*c.r) <= 0;
 }
+*/ 
