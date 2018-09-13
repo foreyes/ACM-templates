@@ -63,6 +63,8 @@ bool pointOnSegment(Point P,Point a,Point b){
 	return dcmp(Cross(a-P,b-P)) == 0 && dcmp((a-P)*(b-P)) < 0;
 } 
 //不损失精度判断线段规范相交(不含端点)
+/若要判断线段是否有点在多边形内部，最好缩多边形，判任一公共点，
+//或者把线段端点往里缩一下，同时取中点，check一下这三个点是不是在多边形内部 
 bool isSegmentsIntersection(Point A,Point B,Point C,Point D){
 	//跨立试验 
 	if(Cross(C-A,D-A) * Cross(C-B,D-B) >= 0) return false;
