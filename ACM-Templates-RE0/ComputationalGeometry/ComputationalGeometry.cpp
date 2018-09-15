@@ -84,16 +84,14 @@ bool isSegmengtsCrash(Point A,Point B,Point C,Point D){
 Point midPoint(Point a,Point b){
 	return Point((a.x+b.x)*0.5,(a.y+b.y)*0.5);
 } 
-//------------------线段相关内容--------------------
-/* 
+//------------------线段相关内容-------------------- 
 //有向直线 
 struct Line{
-	Point P;//直线上任意一点 
-	Point v;//方向向量，左边为半平面 
+	Point p1,p2;//直线上两点，从p1到p2，左边是半平面 
 	double ang;//极角，从x正半轴转到v所需的角(弧度) 
 	Line(){}
-	Line(Point P, Point v):P(P),v(v){
-		ang = atan2(v.y, v.x);
+	Line(Point p1, Point p2):p1(p1),p2(p2){
+		ang = atan2(p2.y-p1.y, p2.x-p1.x);
 	}
 	bool operator < (const Line& L) const{ //半平面交需要的排序函数 
 		return ang < L.ang;

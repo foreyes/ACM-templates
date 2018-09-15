@@ -1,8 +1,9 @@
+/*
 //点p在直线L的左边(不包括线上) 修改 >= 
 bool onLeft(Point p,Line L){
-	return Cross(L.v, p-L.P) > 0;
+	return Cross(L.p2, p-L.p1) > 0;
 }
-//半平面交，不能计算退化的多边形。但是可以将每个半平面略微扩大求得交为单点或者线的情况 
+//半平面交，不能计算退化的多边形。但是可以将每个半平面略微扩大求得交为单点或者线的情况
 //返回半平面交后的多边形的顶点数，多边形存在poly种 
 int halfplaneIntersection(Line* L,int n,Polygon& poly){
 	sort(L,L+n);				//按极角排序 
@@ -32,3 +33,4 @@ int halfplaneIntersection(Line* L,int n,Polygon& poly){
 	for(int i = first;i <= last;i++) poly.ps.pb(p[i]);
 	return poly.size;
 }
+*/ 
