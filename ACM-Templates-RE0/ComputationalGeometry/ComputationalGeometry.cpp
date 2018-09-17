@@ -2,7 +2,6 @@ struct Point{
 	double x,y;ll id; 
 	Point(double _x = 0,double _y = 0):x(_x),y(_y){}
 };
-typedef vector<Point> polygon;
 bool operator<(const Point& a,const Point& b){
 	return (a.x < b.x) || (a.x == b.x && a.y < b.y);
 }
@@ -98,43 +97,23 @@ struct Line{
 	}
 };
 //直线相交，使用前保证有唯一交点，cross(v,w)非0
+Point getLineIntersection(Point A, Point B, Point C, Point D){
+	Point u = A - C, v = B - A, w = D - C;
+	double t = Cross(w, u) / Cross(v, w);
+	return A + v * t;
+}
 Point getLineIntersection(Line L1, Line L2){
-	Point u = L1.P - L2.P;
-	double t = Cross(L2.v, u) / Cross(L1.v, L2.v);
-	return L1.P + L1.v*t; 
+	Point u = L1.p1 - L2.p1, v = L1.p2 - L1.p1, w = L2.p2 - L2.p1;
+	double t = Cross(w, u) / Cross(v, w);
+	return L1.p1 + v * t;
 }
 //点到直线距离
 double distanceToLine(Point P,Line L){
-	Point v1 = L.v, v2 = P - L.P;
+	Point v1 = L.p2 - L.p1, v2 = P - L.p1;
 	return fabs(Cross(v1,v2)) / Length(v1);//不取绝对值就是有向距离 
 }
 //----------------多边形相关内容----------------------
-struct Polygon{
-	int size;
-	vector<Point> ps;
-	vector<double> rad;
-	vector<double> length;
-	void getRad(){
-		//TODO
-	}
-	double getLength(){
-		double sum = 0;
-		length.clear();
-		for(int i = 0;i < size;i++){
-			length.pb(Length(ps[i]-ps[(i+1)%size]));
-			sum += length.back();
-		}
-		return sum;
-	}
-	//使用前请保证ps内按逆时针顺序存放，且为凸多边形 
-	bool pointInPloygon(Point a){
-		for(int i = 0;i < size;i++){
-			if(Cross(ps[i]-a,ps[(i+1)%size]-a) < 0) return false;
-		} 
-		return true;
-	}
-	//TODO:实现判断点在凹多边形内 
-};
+typedef vector<Point> polygon;
 //-----------------圆相关内容-----------------------
 struct Circle{
 	Point o;
@@ -183,4 +162,3 @@ Circle getMinCircle(Point a,Point b,Point c){
 bool pointInCircle(Point a,Circle c){
 	return dcmp(Length2(a-c.o)-c.r*c.r) <= 0;
 }
-*/ 
