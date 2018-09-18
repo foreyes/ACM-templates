@@ -129,21 +129,21 @@ struct Circle{
 Circle getCircle(Point a,Point b){
 	return Circle((a+b)*0.5,Length(a-b)*0.5);
 } 
-//通过三个点来确定一个圆,若三点共线，将最远的两个点作为直径 
-Circle getCircle(Point a, Point b, Point c){
-	if(dcmp(Cross(b-a,c-a)) == 0){
-		//三点共线
-		if (dcmp(Length(a-b)+Length(b-c)-Length(a-c))==0) return getCircle(a,c);
-        if (dcmp(Length(b-a)+Length(a-c)-Length(b-c))==0) return getCircle(b,c);
-        if (dcmp(Length(a-c)+Length(c-b)-Length(a-b))==0) return getCircle(a,b);
-	} else{
-		Line L1 = Line(midPoint(a,b),unitNormal(b-a));
-		Line L2 = Line(midPoint(a,c),unitNormal(c-a));
-		Point o = getLineIntersection(L1,L2);
-		return Circle(o,Length(a-o));
-	}
+//给予三个点，求外接圆 
+Circle Getcir(Point A,Point B,Point C){
+    double a = 2*(B.x - A.x);
+    double b = 2*(B.y - A.y);
+    double c = (B.x*B.x+B.y*B.y) - (A.x*A.x+A.y*A.y);
+    double d = 2*(C.x-B.x);
+    double e = 2*(C.y-B.y);
+    double f = (C.x*C.x + C.y*C.y) - (B.x*B.x + B.y*B.y);
+    double x = (b*f-e*c)/(b*d-e*a);
+    double y = (d*c-a*f)/(b*d-e*a);
+    double r = sqrt((x-A.x)*(x-A.x) + (y-A.y)*(y-A.y));
+    Point ans(x,y);
+    return Circle(ans,r);
 }
-//包含三个点的最小圆
+//包含三个点的面积最小的圆(注意，不是外接圆)
 Circle getMinCircle(Point a,Point b,Point c){
 	if(dcmp(Cross(b-a,c-a)) == 0){
 		//三点共线
@@ -154,8 +154,9 @@ Circle getMinCircle(Point a,Point b,Point c){
 		if((b-a)*(c-a) <= 0) return getCircle(b,c);
 		if((a-b)*(c-b) <= 0) return getCircle(a,c);
 		if((a-c)*(b-c) <= 0) return getCircle(a,b);
-		Line L1 = Line(midPoint(a,b),normal(b-a));
-		Line L2 = Line(midPoint(a,c),normal(c-a));
+		Point m1 = midPoint(a,b), m2 = midPoint(a,c);
+		Line L1 = Line(m1,m1 + normal(b-a));
+		Line L2 = Line(m2,m2 + normal(c-a));
 		Point o = getLineIntersection(L1,L2);
 		return Circle(o,Length(a-o));
 	}
