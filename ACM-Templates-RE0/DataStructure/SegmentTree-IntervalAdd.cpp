@@ -10,6 +10,10 @@ inline ll merge(ll a,ll b){
 inline ll addLazy(int o,int l,int r,ll x){
 	seg[o] += x * (r-l+1);
 	//seg[o] += x;
+	/*区间反转 
+	if(x == 1) seg[o] = (r-l+1) - seg[o];
+	lazy[o] ^= x;
+	*/
 	lazy[o] += x;
 }
 inline void push_down(int o,int l,int r){
