@@ -21,15 +21,15 @@ double operator*(Point a,Point b){
 	return a.x*b.x + a.y*b.y;
 }
 Point operator*(Point a,double b){
-	return Vector(a.x*b, a.y*b);
+	return Point(a.x*b, a.y*b);
 }
 inline double Cross(Point a,Point b){
 	return a.x*b.y - a.y*b.x;
 }
-inline double Length(Vector a){
+inline double Length(Point a){
 	return sqrt(a.x*a.x + a.y*a.y);
 }
-inline double Length2(Vector a){
+inline double Length2(Point a){
 	return a.x*a.x + a.y*a.y;
 }
 //单位化向量 ，若是零向量直接返回 
@@ -58,6 +58,8 @@ Point unitNormal(Point a){
 	return Point(-a.y/l,a.x/l);
 }
 //不损失精度判断线段规范相交(不含端点)
+//若要判断线段是否有点在多边形内部，最好缩多边形，判任一公共点，
+//或者把线段端点往里缩一下，同时取中点，check一下这三个点是不是在多边形内部 
 bool isSegmentsIntersection(Point A,Point B,Point C,Point D){
 	//跨立试验 
 	if(Cross(C-A,D-A) * Cross(C-B,D-B) >= 0) return false;
@@ -127,21 +129,21 @@ struct Circle{
 Circle getCircle(Point a,Point b){
 	return Circle((a+b)*0.5,Length(a-b)*0.5);
 } 
-//通过三个点来确定一个圆,若三点共线，将最远的两个点作为直径 
-Circle getCircle(Point a, Point b, Point c){
-	if(dcmp(Cross(b-a,c-a)) == 0){
-		//三点共线
-		if (dcmp(Length(a-b)+Length(b-c)-Length(a-c))==0) return getCircle(a,c);
-        if (dcmp(Length(b-a)+Length(a-c)-Length(b-c))==0) return getCircle(b,c);
-        if (dcmp(Length(a-c)+Length(c-b)-Length(a-b))==0) return getCircle(a,b);
-	} else{
-		Line L1 = Line(midPoint(a,b),normal(b-a));
-		Line L2 = Line(midPoint(a,c),normal(c-a));
-		Point o = getLineIntersection(L1,L2);
-		return Circle(o,Length(a-o));
-	}
+//给予三个点，求外接圆 
+Circle Getcir(Point A,Point B,Point C){
+    double a = 2*(B.x - A.x);
+    double b = 2*(B.y - A.y);
+    double c = (B.x*B.x+B.y*B.y) - (A.x*A.x+A.y*A.y);
+    double d = 2*(C.x-B.x);
+    double e = 2*(C.y-B.y);
+    double f = (C.x*C.x + C.y*C.y) - (B.x*B.x + B.y*B.y);
+    double x = (b*f-e*c)/(b*d-e*a);
+    double y = (d*c-a*f)/(b*d-e*a);
+    double r = sqrt((x-A.x)*(x-A.x) + (y-A.y)*(y-A.y));
+    Point ans(x,y);
+    return Circle(ans,r);
 }
-//通过三个点得到最小圆
+//包含三个点的面积最小的圆(注意，不是外接圆)
 Circle getMinCircle(Point a,Point b,Point c){
 	if(dcmp(Cross(b-a,c-a)) == 0){
 		//三点共线
@@ -152,8 +154,9 @@ Circle getMinCircle(Point a,Point b,Point c){
 		if((b-a)*(c-a) <= 0) return getCircle(b,c);
 		if((a-b)*(c-b) <= 0) return getCircle(a,c);
 		if((a-c)*(b-c) <= 0) return getCircle(a,b);
-		Line L1 = Line(midPoint(a,b),normal(b-a));
-		Line L2 = Line(midPoint(a,c),normal(c-a));
+		Point m1 = midPoint(a,b), m2 = midPoint(a,c);
+		Line L1 = Line(m1,m1 + normal(b-a));
+		Line L2 = Line(m2,m2 + normal(c-a));
 		Point o = getLineIntersection(L1,L2);
 		return Circle(o,Length(a-o));
 	}
