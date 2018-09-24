@@ -45,7 +45,7 @@ ll build(int o,int l,int r){
 }
 ll addLazy(int o,int l,int r,ll k){
 	addl[o] = (addl[o] + k) % MOD;
-	return seg[o] = (seg[o] + (r-l+1) * k) % MOD;
+	return seg[o] = (seg[o] + k * (r-l+1)) % MOD;
 }
 ll mulLazy(int o,int l,int r,ll k){
 	mull[o] = (mull[o] * k) % MOD;
