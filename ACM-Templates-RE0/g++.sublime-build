@@ -1,0 +1,19 @@
+{
+    "encoding": "utf-8",
+    "working_dir": "$file_path",
+    "shell_cmd": "C:\\MinGW\\bin\\g++ -std=c++11 \"$file\" -o \"$file_path\\\\$file_base_name.exe\"",
+    "file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",
+    "selector": "source.cpp",
+
+    "variants": 
+    [
+        {
+        "name": "Run",
+            "shell_cmd": "\"${file_path}\\\\${file_base_name}.exe\" < in.txt > out.txt"
+        },
+        {   
+        "name": "RunInCmd",
+            "shell_cmd": "start cmd /c \"\"${file_path}\\\\${file_base_name}.exe\" & pause \""
+        }
+    ]
+}
