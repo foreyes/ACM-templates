@@ -6,7 +6,7 @@ Andrew算法基于水平序求凸包
 warning：下标从0开始
 warning: 如果允许计算直线上的多个点，同时可以会是退化多边形的话，用下面的另一个版本 
 */
-int convexHull(Point* p,bool* check,int n,Point* ch,Polygon& poly){
+int convexHull(Point* p,bool* check,int n,Point* ch,polygon& poly){
 	sort(p,p+n);
 	int m = 0;
 	for(int i = 0;i < n;i++){
@@ -29,7 +29,7 @@ int convexHull(Point* p,bool* check,int n,Point* ch,Polygon& poly){
 版本2，用于处理特殊情况。
 特殊情况：需要计算直线上的点，同时可能会有退化成直线的多边形 
 */ 
-int convexHull(Point* p,bool* check,int n,Point* ch,Polygon& poly){
+int convexHull(Point* p,bool* check,int n,Point* ch,polygon& poly){
 	sort(p,p+n);
 	int m = 0,st = n;
 	bool vis[n] = {0};

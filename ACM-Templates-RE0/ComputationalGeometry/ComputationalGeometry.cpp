@@ -5,27 +5,17 @@ struct Point{
 bool operator<(const Point& a,const Point& b){
 	return (a.x < b.x) || (a.x == b.x && a.y < b.y);
 }
-int dcmp(double x){
-	if(fabs(x) < eps) return 0;else return x < 0 ? -1 : 1;
-}
-bool operator==(const Point& a,const Point& b){
-	return dcmp(a.x-b.x) == 0 && dcmp(a.y-b.y) == 0;
-}
-Point operator-(Point a,Point b){
-	return Point(a.x-b.x, a.y-b.y);
-}
-Point operator+(Point a,Point b){
-	return Point(a.x+b.x, a.y+b.y);
-}
-double operator*(Point a,Point b){
-	return a.x*b.x + a.y*b.y;
-}
-Point operator*(Point a,double b){
-	return Point(a.x*b, a.y*b);
-}
-inline double Cross(Point a,Point b){
-	return a.x*b.y - a.y*b.x;
-}
+int dcmp(double x){if (fabs(x)<eps)return 0;else return x<0?-1:1;}
+Point operator + (Point a,Point b){return Point(a.x+b.x,a.y+b.y);}
+Point operator - (Point a,Point b){return Point(a.x-b.x,a.y-b.y);}
+Point operator * (Point a,double b){return Point(a.x*b,a.y*b);}
+Point operator / (Point a,double b){return Point(a.x/b,a.y/b);}
+double operator * (Point a,Point b){return a.x*b.y-a.y*b.x;}
+bool operator == (Point a,Point b){return dcmp(a.x-b.x) == 0 && dcmp(a.y-b.y) == 0;}
+double Dot(Point a,Point b){return a.x*b.x+a.y*b.y;}  //点积
+double Length(Point a){return sqrt(Dot(a,a));}
+double Cross(Point a,Point b){return a.x*b.y-a.y*b.x;} //叉积
+
 inline double Length(Point a){
 	return sqrt(a.x*a.x + a.y*a.y);
 }
@@ -38,6 +28,15 @@ Point unit(Point a){
 	if(l < eps) return a;
 	return Point(a.x/l,a.y/l);
 }
+//求向量A的左转法向量 
+Point normal(Point a){
+	return Point(-a.y,a.x);
+}
+//求单位左转法向量，调用前请保证A不是零向量 
+Point unitNormal(Point a){
+	double l = Length(a);
+	return Point(-a.y/l,a.x/l);
+}
 inline double Angle(Point a,Point b){
 	return acos(a * b / Length(a) / Length(b));
 }
@@ -47,15 +46,6 @@ double Area2(Point a,Point b,Point c){
 }
 Point rotate(Point a,double rad){
 	return Point(a.x*cos(rad)-a.y*sin(rad), a.x*sin(rad)+a.y*cos(rad));
-}
-//求向量A的左转法向量 
-Point normal(Point a){
-	return Point(-a.y,a.x);
-}
-//求单位左转法向量，调用前请保证A不是零向量 
-Point unitNormal(Point a){
-	double l = Length(a);
-	return Point(-a.y/l,a.x/l);
 }
 //不损失精度判断线段规范相交(不含端点)
 //若要判断线段是否有点在多边形内部，最好缩多边形，判任一公共点，
@@ -76,7 +66,7 @@ bool isPointOnSegment(Point P,Point a,Point b){
 	return dcmp(Cross(a-P,b-P)) == 0 && dcmp((a-P)*(b-P)) < 0;
 } 
 //判断两条线段是否有公共点 
-bool isSegmengtsCrash(Point A,Point B,Point C,Point D){
+bool isSegmentsCrash(Point A,Point B,Point C,Point D){
 	if( isPointOnSegment(A,C,D) || isPointOnSegment(B,C,D) ||
 		isPointOnSegment(C,A,B) || isPointOnSegment(D,A,B)) return true;
 	if(dcmp(Cross(B-A,D-C)) == 0) return false;//共线 
@@ -116,6 +106,14 @@ double distanceToLine(Point P,Line L){
 }
 //----------------多边形相关内容----------------------
 typedef vector<Point> polygon;
+void zoom(polygon& poly, double rate){
+	int n = poly.size();
+	vector<Point> tmp;
+	for(int i = 0;i < n;i++) tmp.push_back(unitNormal(poly[i] - poly[(i-1+n)%n]));
+	for(int i = 0;i < n;i++){
+		poly[i] = poly[i] + (unit(tmp[i] + tmp[(i+1)%n]) * rate);
+	}
+}
 //-----------------圆相关内容-----------------------
 struct Circle{
 	Point o;
