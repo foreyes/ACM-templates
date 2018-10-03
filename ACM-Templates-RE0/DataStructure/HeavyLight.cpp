@@ -19,7 +19,7 @@ void dfs1(int cur, int father, int depth) {
 }
 void dfs2(int cur, int tp){
 	top[cur] = tp,dfn[cur] = ++dfs_clock;
-	if(son[cur]) dfs2(son[cur], cur, tp);//优先遍历重儿子 
+	if(son[cur]) dfs2(son[cur],tp);//优先遍历重儿子 
 	for(auto nx: G[cur]) {
 		if(nx != fa[cur] && nx != son[cur]) {
 			dfs2(nx, nx);
