@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 typedef long long ll;
 const ll MOD = 1e9+7;
 
@@ -37,7 +34,6 @@ struct Mat{
 		return ret;
 	}
 };
-
 Mat matPow(Mat a,ll b){
 	Mat ret(a.size);
 	ret.setUnit();
@@ -47,45 +43,4 @@ Mat matPow(Mat a,ll b){
 		b >>= 1;
 	}
 	return ret;
-}
-
-Mat init(){
-	Mat ret(9);
-	ret.setZero();
-	ret[0][1] = ret[0][2] = 1;
-	ret[1][4] = ret[1][5] = 1;
-	ret[2][7] = ret[2][8] = 1;
-	ret[3][0] = ret[3][1] = 1;
-	ret[4][3] = ret[4][5] = 1;
-	ret[5][6] = ret[5][7] = ret[5][8] = 1;
-	ret[6][0] = ret[6][2] = 1;
-	ret[7][3] = ret[7][4] = ret[7][5] = 1;
-	ret[8][6] = ret[8][7] = 1;
-	return ret;
-}
-
-int main(){
-	ios::sync_with_stdio(false);
-	ll n,T;
-	cin>>T;
-	while(T--){
-		cin>>n;
-		if(n == 1){
-			cout<<3<<endl;
-			continue;
-		}
-		if(n == 2){
-			cout<<9<<endl;
-			continue;
-		}
-		Mat M = init();
-		M = matPow(M,n-2);
-		ll ans = 0;
-		for(int i = 0;i < 9;i++){
-			for(int j = 0;j < 9;j++)
-				ans = (ans + M[i][j]) % MOD;
-		}
-		cout<<ans<<endl;
-	} 
-	return 0;
 }
