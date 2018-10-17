@@ -46,7 +46,7 @@ int getPoint(Point *p,Point now,int n){
     for(int i = 0;i < n;i++){
         max_dis = max(max_dis,Length(p[i]-now));
         if(max_dis != pre) res = i;
-        pre = max_d;
+        pre = max_dis;
     }
     return res;
 } 
@@ -56,13 +56,14 @@ Point work(Point* p,int n){
     Point now = p[0],ans = p[0];
     while(t > eps){
         int i = getPoint(p,now,n);
+        double r = Length(p[i] - now);
+        if(min_r > r){
+        	min_r = r;
+        	ans = now;
+		}
         now.x = now.x + (p[i].x - now.x) * t;
         now.y = now.y + (p[i].y - now.y) * t;
         now.z = now.z + (p[i].z - now.z) * t; 
-        if(min_dis > r){
-            min_dis = r;
-            ans = now;
-        }
         t *= delta;
     }
     return ans;
