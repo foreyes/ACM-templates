@@ -18,9 +18,9 @@
  }
  void discretize(ll f, int size){
  	_cnt = 0;
- 	for(int i = 1;i <= n;i++) tmp_id[i] = f[i];
+ 	for(int i = 1;i <= size;i++) tmp_id[i] = f[i];
  	sort(tmp_id+1, tmp_id+size+1);
  	for(int i = 1;i <= size;i++){
- 		if(i != 1 || tmp_id[i] != tmp_id[i-1]) idx[++_cnt] = tmp_id[i];
+ 		if(i == 1 || tmp_id[i] != tmp_id[i-1]) idx[++_cnt] = tmp_id[i];
 	}
 } 
