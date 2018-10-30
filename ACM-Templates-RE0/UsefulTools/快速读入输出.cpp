@@ -19,7 +19,7 @@ inline void write(int x){
 		x *= -1;
 	}
 	char ch = x%10+'0';
-	if(x > 10) write(x/10);
+	if(x >= 10) write(x/10);
 	putchar(ch);
 }
 
