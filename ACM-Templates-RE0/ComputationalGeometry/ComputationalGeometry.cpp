@@ -10,7 +10,7 @@ Point operator + (Point a,Point b){return Point(a.x+b.x,a.y+b.y);}
 Point operator - (Point a,Point b){return Point(a.x-b.x,a.y-b.y);}
 Point operator * (Point a,double b){return Point(a.x*b,a.y*b);}
 Point operator / (Point a,double b){return Point(a.x/b,a.y/b);}
-double operator * (Point a,Point b){return a.x*b.y-a.y*b.x;}
+double operator * (Point a,Point b){return a.x*b.x+a.y*b.y;}
 bool operator == (Point a,Point b){return dcmp(a.x-b.x) == 0 && dcmp(a.y-b.y) == 0;}
 double Dot(Point a,Point b){return a.x*b.x+a.y*b.y;}  //µã»ý
 double Length(Point a){return sqrt(Dot(a,a));}
