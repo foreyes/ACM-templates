@@ -6,6 +6,7 @@ BFS的vis标记一定要在Continue判断之后,push之前打
 树链剖分的修改与查询，给线段树的参数注意是deep小的节点在前，还得套一个dfn[x]
 用lower_bound实现的LIS改成upper_bound即可是不降的。还有更多操作
 同时要用到两个同样名字的变量的算法时一定要区分好。比如并查集和树剖都有的fa数组
+向下取整的时候注意，要分正数和负数来讨论。
 
 cout<<Dicin_flow()<<" "<<tot_cost;
 x = nx[x][y], y = ny[x][y]
