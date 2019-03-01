@@ -14,6 +14,9 @@ BFS的vis标记一定要在Continue判断之后,push之前打
 3.也许根据两个数组的长度决定顺序，能够让边界条件简单很多
 --from leetcode #4
 
+有两个循环退出条件，忘记判断
+忘记判断下标是否越界
+
 cout<<Dicin_flow()<<" "<<tot_cost;
 x = nx[x][y], y = ny[x][y]
 以上两种沙雕写法是不可取的
