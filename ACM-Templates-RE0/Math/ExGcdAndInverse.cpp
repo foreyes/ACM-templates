@@ -1,4 +1,4 @@
-long long exGcd(long long a,long long b,long long &d,long long &x,long long &y) {
+long long exGcd(long long a, long long b, long long &d, long long &x, long long &y) {
     if(b == 0) {
     	d = a; x = 1; y = 0;
     } else {
